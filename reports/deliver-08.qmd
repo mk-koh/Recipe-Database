@@ -1,0 +1,588 @@
+---
+title: Deliverable 8 - Amma's Recipes
+title-block-banner: "#f0f3f5"
+title-block-banner-color: "Black"
+date: last-modified
+author:
+    - name: Michelle Koh 
+      email: kohme@vcu.edu
+    - name: Sona James
+      email: jamess9@vcu.edu
+format:
+    html: 
+        mermaid:
+            theme: forest
+        embed-resources: true
+        theme: litera
+        mainfont: Georgia
+        fontsize: 14px
+        number-sections: true
+        toc: true
+        toc-location: right
+        number-depth: 3
+        code-links:
+            text: GitHub Repository Link
+            icon: link-45deg
+            href: https://github.com/cmsc-vcu/cmsc408-fa2024-proj-cuisine-creators.git
+        grid:
+            margin-width: 200px
+            body-width: 900px
+---
+
+## Project Overview and Key Deliverables
+
+This project is focused on preserving and sharing our family’s cherished recipes, especially those handed down from our mother. By creating a structured database, we recognize the sentimental value of these recipes and provide an accessible platform for friends and family to recreate the unique flavors of home-cooked food. Ultimately, we hope to foster a deeper connection through the joy of cooking and sharing beloved family recipes.
+
+-   [Pitch Video](https://cdnapisec.kaltura.com/index.php/extwidget/preview/partner_id/1888231/uiconf_id/28242191/entry_id/1_0olwmkj0/embed/dynamic)
+
+<!-- -->
+
+-   [Design Video](https://cdnapisec.kaltura.com/index.php/extwidget/preview/partner_id/1888231/uiconf_id/28242191/entry_id/1_17xgd6ka/embed/dynamic)
+
+-   [GitHub Repository](https://github.com/cmsc-vcu/cmsc408-fa2024-proj-cuisine-creators.git)
+
+***
+
+**Problem Description**
+
+-   **Problem Domain**
+
+    The recipe database is designed to preserve and share cherished family recipes, particularly those passed down through generations. The database fosters a global community where food enthusiasts(users) can discover and share recipes. The platform provides an easy and convenient way to reconnect with one's roots while also encouraging interaction among users through recipe reviews and comments. The project addresses the challenge of scattered recipe collections by offering a centralized repository, preserving valuable family recipes for future generations.
+
+-   **Need**
+
+    The database will efficiently organize and manage recipes, ensuring that all the information is stored in one easily accessible location. By providing a single platform for organizing recipes, it simplifies access for users, allowing them to retrieve and share their favorite recipes whenever they want. In doing so, the database helps solve the problem of disorganized recipe collections, making it a valuable resource for preserving and sharing family recipes. Additionally, it enhances the accessibility of these recipes, ensuring they are available to users anywhere, anytime.
+
+-   **Context, scope, and Perspective**
+
+    This database is designed specifically for individuals who appreciate home-cooked Indian Cuisine. It offers a user-friendly platform that simplifies the process of finding and preparing recipes, catering to home cooks and food enthusiasts interested in exploring and recreating Indian recipes. The scope of the database focuses on Indian recipes, with features that allow recipes that allow users to browse recipes by category, flavors, and diet type.
+
+-   **User Roles and Use Cases**
+
+    -   **User Roles**
+
+        The main distinction between categories of users when it comes to interacting with our database will be that between the administrator and simple users.
+
+        -   **Administrator (Primary User):** The admin has full control over the database. They have the permission to add, edit, or delete recipes. This role ensures the proper functioning of the database platform, including managing the recipes.
+        -   **Users:** Regular users have permission to read and view existing recipe data from the database. They have the ability to share feedback by leaving comments and ratings on the recipes they try, enhancing community interaction.
+
+    -   **Use Cases**
+
+        1.  **Admin Managing Recipes** The administrator can add new recipes, edit existing ones, or delete recipes from the database. They can specify details such as recipe name, category(e.g., breakfast, lunch), flavors (e.g., spicy, sweet), diet type (e.g., vegan, non-vegetarian), preparation and cook times, and the number of servings. The admin can also edit other specific details of the recipe to ensure accuracy.
+        2.  **Users Viewing Recipes** Users can browse through available recipes by applying filters such as diet type(e.g., vegan, vegetarian) or flavor(e.g., umami, mild) or they can directly search for a specific dish. Once they find a recipe, they can view detailed information, including ingredients, nutritional facts, and cooking instructions.
+        3.  **Users Logging In** Users must log in by entering their username and password to interact with certain features. Once logged in, they can access their account, browse recipes, and provide feedback through reviews.
+        4.  **Users Leaving Reviews** A user can leave a rating (1-5) and write a comment (optional) after trying a new recipe. To leave a review, the user must be logged in and select a specific recipe. The reviews will be available for other users to view, providing valuable feedback for other users.
+
+-   **Security and Privacy**
+
+    To protect user data, we would implement user authentication services. Data encryption will ensure that sensitive user information, such as email addresses and passwords, remains secure. We will further protect the platform by restricting unauthorized users from accessing admin functionalities. Users will only be allowed to interact with the public content, ensuring that the database platform remains secure while creating community engagement.
+
+## Database Design
+
+The primary entities in our database are focused on the following entities:
+
+1.  Recipe - A collection of dishes made by our mothers, including attributes such as description, cook time, preparation time, flavor, diet type, servings, and more.
+
+2.  Ingredient - various types of food items used in a recipe, with attributes such as name, quantity, and the unit of measurement.
+
+3.  Nutrition - nutritional data associated with the recipe, including common items such as calories, carbs, fat, and more.
+
+4.  User - represents individuals who use the platform, including attributes, such as name, username, password, and email.
+
+5.  Review - represents user feedback on the platform, including comments and ratings.
+
+6.  Step - represents a step in the recipe instructions, including attributes such as step number and direction.
+
+### Entity-relationship diagram (ERD)
+
+#### High-Level Logical Architecture with Chen's Notation
+
+```{dot}
+// | fig-width: 50%
+graph ER {
+    
+    bgcolor=transparent;   // Use bgcolor=transparent for final plot
+    layout=neato  
+    scale=1.0     // changes the size of shapes all at once
+    overlap=false;
+    ratio=compress
+
+    // Set defaults for nodes
+    node [fontname="Georgia",fontsize=10] // Smaller font size, reduced node size
+
+    // Define nodes
+    node [shape=box, fontcolor=black, style=filled, color=darkolivegreen3];
+   User; Review; Ingredient; Recipe; Nutrition; 
+
+    node[shape=box, peripheries=2]; 
+    Step;
+
+    node [shape=diamond,peripheries=0,fontcolor=white, color=black];
+    "R-N"; "R-R"; "U-R"; "RI-I"; "R-RI"
+
+    node[shape=diamond,peripheries=2]; "R-S";
+
+     node[shape=box, peripheries=1, color= darkolivegreen3, fontcolor= black,style="dashed";height=.5];
+    Recipe_Ingredient;
+
+    // Define edges
+    Recipe -- "R-N" [label="1"]; 
+    "R-N" -- Nutrition [label="1"]; 
+
+    Recipe -- "R-S" [label="1"];
+    "R-S" -- Step [label="N"];
+
+    Recipe -- "R-R" [label="1"]; 
+    "R-R" -- Review [label="N"]; 
+
+    // Recipe -- "R-I" [label="M"];
+    // "R-I" -- Ingredient [label="N"];
+
+    User -- "U-R" [label="1"]; 
+    "U-R" -- Review [label="N"]; 
+
+    Recipe -- "R-RI"[label="1"];
+    "R-RI" -- Recipe_Ingredient[label="N"]
+    Recipe_Ingredient -- "RI-I"[label="N"]
+    "RI-I" -- Ingredient[label="1"]
+
+}
+
+```
+
+#### Granular Data Model with Crow's Foot Notation
+
+```{mermaid}
+erDiagram 
+    
+    RECIPE {
+        int recipe_ID PK
+        string name
+        string description
+        enum category 
+        enum diet_type
+        enum flavor
+        int servings
+        time prep_time
+        time cook_time
+        string preparation
+    }
+
+     STEP{
+        int recipe_ID PK, FK
+        int step_num
+        string direction
+    }
+
+     INGREDIENT {
+        int ingredient_ID PK
+        string ingredient_name
+        enum food_grp
+    }
+
+    RECIPE_INGREDIENT{
+        int recipe_ID PK, FK
+        int ingredient_ID FK
+        decimal quantity
+        enum unit    
+    }
+
+    NUTRITION {
+        int recipe_ID PK, FK
+        decimal calories
+        decimal fat
+        decimal cholesterol 
+        decimal sodium
+        decimal carbs
+        decimal protein
+    }
+
+    USER {
+        int user_ID PK
+        string first_name
+        string last_name
+        string email
+        string user_name
+        string password
+    }
+
+    REVIEW {
+        int review_ID PK
+        int recipe_ID FK
+        int user_ID FK
+        int rating
+        string comment
+    }
+    
+    RECIPE ||--|{ NUTRITION : has
+    RECIPE ||--o{ STEP : has
+
+    RECIPE }o--o{ INGREDIENT : has
+    RECIPE ||--o{ RECIPE_INGREDIENT : has
+    RECIPE_INGREDIENT }o--|| INGREDIENT : "refers to"
+    
+
+    RECIPE ||--o{ REVIEW : receives
+    USER ||--o{ REVIEW : writes   
+
+```
+
+### Relational Schemas
+
+#### Table 1: Recipe Table
+
+`Recipe`(`recipe_ID` \[PK\], `name`, `description`, `category`, `diet_type`, `flavor`, `servings`, `prep_time`, `cook_time`, `preparation` )
+
+| Data Type | Attribute | Domain | Constraints |
+|------------------|------------------|------------------|------------------|
+| int | recipe_ID (PK) | Positive Integer | PRIMARY KEY, NOT NULL |
+| string | name | varchar(255) | NOT NULL, UNIQUE |
+| string | description | Any length string | NOT NULL |
+| enum | category | Should be one of these options: `Breakfast`, `Lunch`, `Dinner`, `Snack`, `Dessert`,`Drink`,`Appetizer` | NOT NULL |
+| enum | diet_type | Should be one of these options: `Vegetarian`, `Vegan`, `Non-vegetarian` | NOT NULL |
+| enum | flavor | Should be one of these options: `Sweet`, `Sour`, `Salty`, `Bitter`, `Umami`, `Mild`, `Spicy` | NOT NULL |
+| int | servings | Positive Integer | NOT NULL |
+| time | prep_time | Greater than or equal to 0 | NOT NULL |
+| time | cook_time | Greater than 0 | NOT NULL |
+| string | preparation | Any length string | NOT NULL |
+
+: {.striped .hover}
+
+::: callout-note
+The `name` attribute must be `UNIQUE` since only one recipe would exist for a specific dish.
+:::
+
+ 
+
+#### Table 2: Step Table
+
+`Step`(`recipe_ID` \[PK, FK\], `step_num`, `direction` )
+
+| Data Type | Attribute | Domain | Constraints |
+|:-----------------|:-----------------|:-----------------|------------------|
+| int | recipe_ID (PK,FK) | Positive Integer | PRIMARY, FOREIGN KEY, NOT NULL |
+| int | step_num | Positive Integer | NOT NULL |
+| string | direction | Any length string | NOT NULL |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `recipe_ID` must reference the `recipe_ID` in the `Recipe` Table.
+:::
+
+ 
+
+#### Table 3: Ingredient Table
+
+`Ingredient`( `ingredient_ID` \[PK\], `ingredient_name`, `food_grp`)
+
+| Data Type | Attribute | Domain | Constraints |
+|------------------|------------------|------------------|------------------|
+| int | ingredient_ID (PK) | Positive Integer | PRIMARY KEY, NOT NULL |
+| string | ingredient_name | varchar(255) | NOT NULL, UNIQUE |
+| enum | food_grp | Should be one of these options: `Fruit`, `Vegetable`, `Grain`, `Protein`, `Dairy`, `Sugar` , `Oil`, `Beverage` | NOT NULL |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `ingredient_name` must be `UNIQUE` as each ingredient has its own name.
+:::
+
+ 
+
+#### Table 4: Recipe_Ingredient Table
+
+`Recipe_Ingredient`(`recipe_ID` \[PK, FK\], `ingredient_ID` \[FK\], `quantity`, `unit`)
+
+| Data Type | Attribute | Domain | Constraints |
+|:-----------------|:-----------------|:------------------|------------------|
+| int | recipe_ID (PK, FK) | Positive Integer | PRIMARY KEY, FOREIGN KEY, NOT NULL |
+| int | ingredient_ID (FK) | Positive Integer | FOREIGN KEY, NOT NULL |
+| decimal | quantity | Positive Decimal | NOT NULL |
+| enum | unit | Should be one of these options: `Teaspoon`, `Tablespoon`, `Cup`, `Milliliter`, `Liter`, `Gram`,`Kilogram`, `Ounce`, `Pound`, `Piece`, `Whole`, `Slice`, `Pinch` | NOT NULL |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `recipe_ID` should reference the `recipe_ID` from the `Recipe` table. The attribute `ingredient_ID` should reference the `ingredient_ID` from the `Ingredient` table.
+:::
+
+ 
+
+#### Table 5: Nutrition Table
+
+`Nutrition`( `recipe_ID` \[PK, FK\], `calories`, `fat`, `cholesterol`, `sodium`, `carbohydrate`, `protein` )
+
+| Data Type | Attribute | Domain | Constraints |
+|:-----------------|:-----------------|:-----------------|------------------|
+| int | recipe_ID (PK, FK) | Positive Integer | PRIMARY KEY, FOREIGN KEY, NOT NULL |
+| decimal | calories | Postive Decimal | NOT NULL |
+| decimal | fat | Postive Decimal | NOT NULL |
+| decimal | cholesterol | Postive Decimal | NOT NULL |
+| decimal | sodium | Postive Decimal | NOT NULL |
+| decimal | carbohydrate | Postive Decimal | NOT NULL |
+| decimal | protein | Postive Decimal | NOT NULL |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `recipe_ID` should reference the `recipe_ID` from the `Recipe` table.
+:::
+
+ 
+
+#### Table 6: User Table
+
+`User`( `user_ID` \[PK\],`first_name`, `last_name`, `email`, `user_name`, `password` )
+
+| Data Type | Attribute    | Domain            | Constraints           |
+|:----------|:-------------|:------------------|-----------------------|
+| int       | user_ID (PK) | Positive Integer  | PRIMARY KEY, NOT NULL |
+| string    | first_name   | varchar(100)      | NOT NULL              |
+| string    | last_name    | varchar(100)      | NOT NULL              |
+| string    | email        | varchar(100)      | NOT NULL, UNIQUE      |
+| string    | user_name    | varchar(255)      | NOT NULL, UNIQUE      |
+| string    | password     | Any length string | NOT NULL              |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `user_name` and `email` should be `UNIQUE`. One email should correspond to only one user account and each username created should be different than the other usernames.
+:::
+
+ 
+
+#### Table 7: Review Table
+
+`Review`( `review_ID` \[PK\], `recipe_ID` \[FK\], `user_ID` \[FK\], `rating`, `comment`)
+
+| Data Type | Attribute      | Domain                 | Constraints           |
+|:----------|:---------------|:-----------------------|-----------------------|
+| int       | review_ID (PK) | Positive Integer       | PRIMARY KEY, NOT NULL |
+| int       | recipe_ID (FK) | Positive Integer       | FOREIGN KEY, NOT NULL |
+| int       | user_ID (FK)   | Positive Integer       | FOREIGN KEY, NOT NULL |
+| int       | rating         | Positive Integer (1-5) | NOT NULL              |
+| string    | comment        | Any length string      | CAN BE NULL           |
+
+: {.striped .hover}
+
+::: callout-note
+The attribute `recipe_ID` should reference the `recipe_ID` from the `Recipe` table and `user_ID` should reference the `user_ID` from the `User` Table.
+:::
+
+ 
+
+### Functional Dependencies and Normalization
+
+Throughout the normalization process, we ensured that each relation adhered to BCNF by making sure that non-prime attributes were functionally dependent on the primary key. While further normalization to 4NF would address multi-valued dependencies, the current schema is sufficiently normalized in BCNF to maintain data integrity. The recipe database has functional dependencies such as the unique identifier recipe_ID that determines all the other attributes of the recipe entity, like name, cook_time, prep_time, servings, description, preparation, category, flavor, and diet_type.
+
+The normalization process to BCNF/4NF involves simplifying the database schema to reduce redundancy and improve data integrity by finding relations and the dependencies of superkeys.
+
+For Recipe the initial relation is Recipe(recipe_ID, name, cook_time, prep_time, servings, description, preparation, category, flavor, diet_type) and the functional dependency is recipe_ID -\> (name, cook_time, prep_time, servings, description, preparation, category, flavor, diet_type). So Recipe is in BCNF as recipe_ID is a superkey.
+
+To address the many-to-many relationship between recipes and ingredients, we introduced the RECIPE_INGREDIENT table as an intermediary entity with composite keys (recipe_ID and ingredient_ID). This allows multiple ingredients to be linked to a single recipe, while also enabling each ingredient to appear in several recipes. Also, we correctly modeled the relationship between users and reviews, allowing users to write multiple reviews and recipes to receive feedback from different users.
+
+This design effectively preserves functional dependencies, minimizes redundancy, and offers flexibility in representing relationships.
+
+ 
+
+### Specific queries
+
+**1. List all recipes along with their cooking and preparation times**
+
+:   π (name, cook_time, prep_time) (RECIPE)
+
+**2. Find the highest-rated recipe based on user reviews**
+
+:   π (name, MAX(rating)) (RECIPE ⨝ REVIEW)
+
+**3. Retrieve all reviews for a specific recipe**
+
+:   σ recipe_ID = given_recipe_ID (REVIEW)
+
+**4. List users who have written reviews for recipes**
+
+:   π (user_name) (USER ⨝ REVIEW)
+
+**5. Find all recipes that are suitable for a specific diet type (ie Vegetarian)**
+
+:   π (name) (σ diet_type = 'Vegetarian' (RECIPE ⨝ INGREDIENT))
+
+**6. Get the average rating for each recipe**
+
+:   π (name, AVG(rating)) (RECIPE ⨝ REVIEW)
+
+**7. Display all ingredients used in a specific recipe**
+
+:   π (name) (σ recipe_ID = given_recipe_ID (INGREDIENT ⨝ RECIPE_INGREDIENT))
+
+**8. Identify users who have rated a specific recipe**
+
+:   π (user_name) (σ recipe_ID = given_recipe_ID (USER ⨝ REVIEW))
+
+**9. List all recipes that require a certain ingredient**
+
+:   π (name) (σ ingredient_name = 'given_ingredient' (RECIPE ⨝ RECIPE_INGREDIENT ⨝ INGREDIENT))
+
+**10. Get the nutritional information for a recipe**
+
+:   π (calories, protein, fat, carbohydrates, sodium, cholesterol) (σ recipe_ID = given_recipe_ID (RECIPE ⨝ NUTRITION))
+
+**11. Find all recipes with no reviews**
+
+:   π recipe_ID,name (σ recipe_ID∈/(π recipe_ID(REVIEW))(RECIPE))
+
+**12. List recipes with a specific amount of calories or less**
+
+:   π recipe_ID,name (σ calories≤ given_calories (NUTRITION⋈RECIPE))
+
+**13. List all recipes with a specific category (ie Dessert)**
+
+:   π recipe_ID,name (σ category= ′Dessert′ (RECIPE))
+
+**14. Find all recipes that have a cook time of less than 30 minutes**
+
+:   π recipe_ID,name (σ cook_time\<30 (RECIPE))
+
+**15. Find recipes that use an ingredient from the 'Vegetable' food group**
+
+:   π recipe_ID,name (σ food_grp=′Vegetable′ (INGREDIENT⋈RECIPE_INGREDIENT⋈RECIPE))
+
+**16. Count how many reviews a recipe has**
+
+:   π recipe_ID,COUNT(review_ID) (REVIEW)
+
+**17. Display all the recipes that have more than a specified number of servings**
+
+:   π recipe_ID,name (σ servings \> given_serving (RECIPE))
+
+**18. Find all the recipes that have a specific flavor profile (ie Sweet)**
+
+:   π recipe_ID,name (σ flavor=′Sweet′ (RECIPE))
+
+**19. Find which recipe has the most amount of steps**
+
+:   π recipe_ID,MAX(COUNT(step_num)) (STEP)
+
+**20. Find first and last name from username**
+
+:   π first_name,last_name (σ user_name= ′given_user_name′ (USER))
+
+ 
+
+### Sample Data
+
+#### Table 1: Recipe Sample
+
+| recipe_ID | name | description | category | diet_type | flavor | servings | prep_time | cook_time | preparation |
+|--------|--------|-----------------|--------|--------|--------|--------|--------|--------|--------|
+| 1 | Chocolate Mousse | A rich and creamy dessert made with chocolate and whipped cream, perfect for satisfying sweet cravings. | Dessert | Non-vegetarian | Sweet | 4 | 15 min | 30 min | Mix and chill |
+| 2 | Vegetable Stir Fry | A quick and healthy dish packed with colorful vegetables, stir-fried in a savory sauce. | Main | Vegan | Umami | 2 | 10 min | 20 min | Sauté and serve |
+| 3 | Spicy Avocado Salsa | A zesty and fresh salsa featuring ripe avocados, perfect for dipping or topping your favorite dishes. | Appetizer | Vegetarian | Spicy | 6 | 5 min | 10 min | Mix and serve |
+| 4 | Berry Smoothie | A refreshing and nutritious smoothie made with mixed berries, ideal for a quick, healthy snack. | Dessert | Vegetarian | Fruity | 2 | 2 min | 5 min | Blend ingredients |
+| 5 | Grilled Chicken Salad | A light and flavorful salad with grilled chicken, crisp greens, and a tangy dressing. | Main | Non-vegetarian | Umami | 3 | 10 min | 25 min | Grill and toss |
+
+: {.striped .hover}
+
+ 
+
+#### Table 2: Step Sample
+
+| step_num | recipe_ID | direction                                |
+|----------|-----------|------------------------------------------|
+| 1        | 1         | Preheat oven to 350°F.                   |
+| 2        | 1         | Mix flour, sugar, and butter.            |
+| 3        | 2         | Boil water and add pasta.                |
+| 4        | 2         | Stir in sauce and simmer for 10 minutes. |
+| 5        | 3         | Chop vegetables and toss in a bowl.      |
+
+: {.striped .hover}
+
+ 
+
+####   Table 3: Ingredient Sample
+
+| ingredient_ID | ingredient_name | food_grp  |
+|---------------|-----------------|-----------|
+| 1             | Heavy Cream     | Dairy     |
+| 2             | Bell Pepper     | Vegetable |
+| 3             | Avocado         | Vegetable |
+| 4             | Mixed Berries   | Fruit     |
+| 5             | Chicken Breast  | Protein   |
+
+: {.striped .hover}
+
+ 
+
+#### Table 4: Recipe_Ingredient Sample
+
+| recipe_ID | ingredient_ID | quantity | unit  |
+|-----------|---------------|----------|-------|
+| 1         | 1             | 1        | Cup   |
+| 2         | 2             | 2        | Whole |
+| 3         | 3             | 1        | Whole |
+| 4         | 4             | 1        | Cup   |
+| 5         | 5             | 2        | Piece |
+
+: {.striped .hover}
+
+ 
+
+####   Table 5: Nutrition Sample
+
+| recipe_ID | calories | fat | cholesterol | sodium | carbohydrate | protein |
+|-----------|----------|-----|-------------|--------|--------------|---------|
+| 1         | 300      | 15  | 100         | 200    | 30           | 5       |
+| 2         | 150      | 5   | 0           | 50     | 20           | 4       |
+| 3         | 100      | 7   | 0           | 25     | 15           | 2       |
+| 4         | 200      | 3   | 0           | 10     | 40           | 1       |
+| 5         | 350      | 20  | 80          | 300    | 10           | 25      |
+
+: {.striped .hover}
+
+ 
+
+#### Table 6: User Sample
+
+| user_ID | first_name | last_name | email              | user_name   | password    |
+|------------|------------|------------|------------|------------|------------|
+| 1       | John       | Doe       | john\@example.com  | john_doe    | pass123     |
+| 2       | Jane       | Smith     | jane\@example.com  | jane_smith  | password321 |
+| 3       | Sam        | Brown     | sam\@example.com   | sam_brown   | secret987   |
+| 4       | Emily      | Jones     | emily\@example.com | emily_jones | mypassword  |
+| 5       | Mike       | Taylor    | mike\@example.com  | mike_taylor | letmein     |
+
+: {.striped .hover}
+
+ 
+
+#### Table 7: Review Sample
+
+| review_ID | recipe_ID | user_ID | rating | comment                               |
+|---------------|---------------|---------------|---------------|---------------|
+| 1         | 1         | 1       | 5      | Absolutely delicious!                 |
+| 2         | 2         | 2       | 4      | Very tasty, but could use more spice. |
+| 3         | 3         | 3       | 3      | Good, but not my favorite.            |
+| 4         | 4         | 4       | 5      | Best smoothie I've ever made!         |
+| 5         | 5         | 5       | 4      | Really enjoyed this salad!            |
+
+: {.striped .hover}
+
+ 
+
+## Project Management
+
+### Draft Project schedule
+
+| Milestones                                   | Start Date | End Date |
+|----------------------------------------------|------------|----------|
+| Deliverable 5 (Topic Proposal)               | 9/1        | 9/15     |
+| Deliverable 8 (Phase 1)                      | 9/15       | 10/13    |
+| Deliverable 9 (Working website using docker) | 10/13      | 10/20    |
+| Deliverable 12 (Phase 2)                     | 10/20      | 12/9     |
+
+![](../asset/chart.png)
+
+### Video
+
+![](../asset/Database%20Design%20Video.mp4)

@@ -1,0 +1,1114 @@
+---
+title: Deliverable 12 - Amma's Recipes
+title-block-banner: "#c9d48b"
+title-block-banner-color: "Black"
+date: last-modified
+author:
+    - name: Michelle Koh 
+      email: kohme@vcu.edu
+    - name: Sona James
+      email: jamess9@vcu.edu
+format:
+    html: 
+        mermaid:
+            theme: forest
+        embed-resources: true
+        theme: litera
+        mainfont: Georgia
+        fontsize: 14px
+        number-sections: true
+        toc: true
+        toc-location: right
+        number-depth: 3
+        code-links:
+            text: GitHub Repository Link
+            icon: link-45deg
+            href: https://github.com/cmsc-vcu/cmsc408-fa2024-proj-cuisine-creators.git
+        grid:
+            margin-width: 200px
+            body-width: 900px
+---
+
+## Project Overview and Key Deliverables
+
+This project is focused on preserving and sharing our family’s cherished recipes, especially those handed down from our mother. By creating a structured database, we recognize the sentimental value of these recipes and provide an accessible platform for friends and family to recreate the unique flavors of home-cooked food. Ultimately, we hope to foster a deeper connection through the joy of cooking and sharing beloved family recipes.
+
+-   [Pitch Video](https://cdnapisec.kaltura.com/index.php/extwidget/preview/partner_id/1888231/uiconf_id/28242191/entry_id/1_0olwmkj0/embed/dynamic)
+
+-   [Design Video](https://cdnapisec.kaltura.com/index.php/extwidget/preview/partner_id/1888231/uiconf_id/28242191/entry_id/1_17xgd6ka/embed/dynamic)
+
+-   [Final Video](https://cdnapisec.kaltura.com/index.php/extwidget/preview/partner_id/1888231/uiconf_id/28242191/entry_id/1_fyli4h0w/embed/dynamic)
+
+-   [GitHub Repository](https://github.com/cmsc-vcu/cmsc408-fa2024-proj-cuisine-creators.git)
+
+------------------------------------------------------------------------
+
+**Problem Description**
+
+-   **Problem Domain**
+
+    The recipe database is designed to preserve and share cherished family recipes, particularly those passed down through generations. The database fosters a global community where food enthusiasts(users) can discover and share recipes. The platform provides an easy and convenient way to reconnect with one's roots while also encouraging interaction among users through recipe reviews and comments. The project addresses the challenge of scattered recipe collections by offering a centralized repository, preserving valuable family recipes for future generations.
+
+-   **Need**
+
+    The database will efficiently organize and manage recipes, ensuring that all the information is stored in one easily accessible location. By providing a single platform for organizing recipes, it simplifies access for users, allowing them to retrieve and share their favorite recipes whenever they want. In doing so, the database helps solve the problem of disorganized recipe collections, making it a valuable resource for preserving and sharing family recipes. Additionally, it enhances the accessibility of these recipes, ensuring they are available to users anywhere, anytime.
+
+-   **Context, scope, and Perspective**
+
+    This database is designed specifically for individuals who appreciate home-cooked Indian Cuisine. It offers a user-friendly platform that simplifies the process of finding and preparing recipes, catering to home cooks and food enthusiasts interested in exploring and recreating Indian recipes. The scope of the database focuses on Indian recipes, with features that allow recipes that allow users to browse recipes by category, flavors, and diet type.
+
+-   **User Roles and Use Cases**
+
+    -   **User Roles**
+
+        The main distinction between categories of users when it comes to interacting with our database will be that between the administrator and simple users.
+
+        -   **Administrator (Primary User):** The admin has full control over the database. They have the permission to add, edit, or delete recipes. This role ensures the proper functioning of the database platform, including managing the recipes.
+        -   **Users:** Regular users have permission to read and view existing recipe data from the database. They have the ability to share feedback by leaving comments and ratings on the recipes they try, enhancing community interaction.
+
+    -   **Use Cases**
+
+        1.  **Admin Managing Recipes** The administrator can add new recipes, edit existing ones, or delete recipes from the database. They can specify details such as recipe name, category(e.g., breakfast, lunch), flavors (e.g., spicy, sweet), diet type (e.g., vegan, non-vegetarian), preparation and cook times, and the number of servings. The admin can also edit other specific details of the recipe to ensure accuracy.
+        2.  **Users Viewing Recipes** Users can browse through available recipes by applying filters such as flavor(e.g., umami, mild). Once they open a recipe, they can view detailed information, including ingredients, nutritional facts, and cooking instructions.
+        3.  **Users Logging In** Users must log in by entering their username and password to interact with certain features. Once logged in, they can access their account, browse recipes, and provide feedback through reviews.
+        4.  **Users Leaving Reviews** A user can leave a rating (1-5) and write a comment (optional) after trying a new recipe. To leave a review, the user must be logged in and select a specific recipe. The reviews will be available for other users to view, providing valuable feedback for other users.
+
+-   **Security and Privacy**
+
+    To protect user data, we would implement user authentication services. Data encryption will ensure that sensitive user information, such as email addresses and passwords, remains secure. User passwords will be hashed and stored in the database. We will further protect the platform by restricting unauthorized users from accessing admin functionalities. Users will only be allowed to interact with the public content, ensuring that the database platform remains secure while creating community engagement.
+
+## Database Design
+
+The primary entities in our database are focused on the following entities:
+
+1.  Recipe - A collection of dishes made by our mothers, including attributes such as description, cook time, preparation time, flavor, diet type, servings, and more.
+
+2.  Ingredient - various types of food items used in a recipe, with attributes such as name, quantity, and the unit of measurement.
+
+3.  Nutrition - nutritional data associated with the recipe, including common items such as calories, carbs, fat, and more.
+
+4.  User - represents individuals who use the platform, including attributes, such as name, username, password, and email.
+
+5.  Review - represents user feedback on the platform, including comments and ratings.
+
+6.  Step - represents a step in the recipe instructions, including attributes such as step number and direction.
+
+### Entity-relationship diagram (ERD)
+
+#### High-Level Logical Architecture with Chen's Notation
+
+```{dot}
+// | fig-width: 50%
+graph ER {
+    
+    bgcolor=transparent;   // Use bgcolor=transparent for final plot
+    layout=neato  
+    scale=1.0     // changes the size of shapes all at once
+    overlap=false;
+    ratio=compress
+
+    // Set defaults for nodes
+    node [fontname="Georgia",fontsize=10] // Smaller font size, reduced node size
+
+    // Define nodes
+    node [shape=box, fontcolor=black, style=filled, color=darkolivegreen3];
+   User; Review; Ingredient; Recipe; Nutrition; 
+
+    node[shape=box, peripheries=2]; 
+    Step;
+
+    node [shape=diamond,peripheries=0,fontcolor=white, color=black];
+    "R-N"; "R-R"; "U-R"; "RI-I"; "R-RI"
+
+    node[shape=diamond,peripheries=2]; "R-S";
+
+     node[shape=box, peripheries=1, color= darkolivegreen3, fontcolor= black,style="dashed";height=.5];
+    Recipe_Ingredient;
+
+    // Define edges
+    Recipe -- "R-N" [label="1"]; 
+    "R-N" -- Nutrition [label="1"]; 
+
+    Recipe -- "R-S" [label="1"];
+    "R-S" -- Step [label="N"];
+
+    Recipe -- "R-R" [label="1"]; 
+    "R-R" -- Review [label="N"]; 
+
+    // Recipe -- "R-I" [label="M"];
+    // "R-I" -- Ingredient [label="N"];
+
+    User -- "U-R" [label="1"]; 
+    "U-R" -- Review [label="N"]; 
+
+    Recipe -- "R-RI"[label="1"];
+    "R-RI" -- Recipe_Ingredient[label="N"]
+    Recipe_Ingredient -- "RI-I"[label="N"]
+    "RI-I" -- Ingredient[label="1"]
+
+}
+
+```
+
+#### Granular Data Model with Crow's Foot Notation
+
+```{mermaid}
+erDiagram 
+    
+    RECIPE {
+        int recipe_ID PK
+        string name
+        string description
+        enum category
+        enum flavor
+        int servings
+        int prep_time
+        int cook_time
+        text preparation
+    }
+
+     STEP{
+        int step_ID PK
+        int recipe_ID FK
+        int step_num
+        varchar direction
+    }
+
+     INGREDIENT {
+        int ingredient_ID PK
+        string ingredient_name
+        enum food_grp
+    }
+
+    RECIPE_INGREDIENT{
+        int recipe_ID PK, FK
+        int ingredient_ID FK
+        decimal quantity
+        enum unit    
+    }
+
+    NUTRITION {
+        int recipe_ID PK, FK
+        int calories
+        int fat
+        int cholesterol 
+        int sodium
+        int carbs
+        int protein
+    }
+
+    USER {
+        int user_ID PK
+        varchar first_name
+        varchar last_name
+        varchar email
+        varchar user_name
+        varchar password
+    }
+
+    REVIEW {
+        int review_ID PK
+        int recipe_ID FK
+        int user_ID FK
+        int rating
+        varchar comment
+    }
+    
+    RECIPE ||--|{ NUTRITION : has
+    RECIPE ||--o{ STEP : has
+
+    RECIPE }o--o{ INGREDIENT : has
+    RECIPE ||--o{ RECIPE_INGREDIENT : has
+    RECIPE_INGREDIENT }o--|| INGREDIENT : "refers to"
+    
+
+    RECIPE ||--o{ REVIEW : receives
+    USER ||--o{ REVIEW : writes   
+
+```
+
+## Data and the Data Definition Language (DDL)
+
+The database is designed to store and manage recipes, their ingredients, steps, nutritional information, and user reviews. It organizes the data into several related tables to keep its data integrity through primary and foreign keys.
+
+***
+
+### Recipe Table:
+
+Stores basic information about recipes, such as the name, description, preset category, preset flavor, number of servings, and preparation/cooking times. Each recipe is uniquely identified by the primary key, recipe_ID.
+
+``` sql
+CREATE TABLE Recipe (
+    recipe_ID INT auto_increment,
+    name VARCHAR(255) NOT NULL,
+    description text NOT NULL,
+    category ENUM('Breakfast', 'Lunch/Dinner', 'Snack', 'Dessert', 'Drink', 'Appetizer', 'Curry'),
+    flavor ENUM('Sweet', 'Sour', 'Salty', 'Bitter', 'Umami', 'Mild', 'Spicy'),
+    servings INT NOT NULL,
+    prep_time INT,
+    cook_time INT NOT NULL,
+    preparation text,
+    PRIMARY KEY(recipe_ID)
+);
+```
+
+***
+
+### Step Table:
+
+Contains the preparation steps for each recipe. Each step is numbered and linked to a specific recipe through recipe_ID so that the preparation process is recorded in order.
+
+``` sql
+CREATE TABLE Step(
+    step_ID INT auto_increment PRIMARY KEY,
+    recipe_ID INT NOT NULL,
+    step_num INT NOT NULL,
+    direction VARCHAR(255) NOT NULL,
+    FOREIGN KEY (recipe_ID) 
+        REFERENCES Recipe(recipe_ID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+```
+
+***
+
+### Ingredient Table:
+
+Holds information about ingredients, including the name of the ingredient and the food group it belongs to. Each ingredient is uniquely identified by the primary key, ingredient_ID.
+
+``` sql
+CREATE TABLE Ingredient(
+    ingredient_ID INT auto_increment PRIMARY KEY,
+    ingredient_name VARCHAR(255) NOT NULL,
+    food_grp ENUM('Fruit', 'Vegetable', 'Grain', 'Protein', 'Dairy', 'Sugar', 'Oil', 'Beverage', 'Spice', 'Seed', 'Salt')
+);
+```
+
+***
+
+### Recipe_Ingredient Table:
+
+Links recipes and their ingredients and tracks the quantity and unit of each ingredient used in a specific recipe. Uses many-to-many relationships between recipes and ingredients since one recipe can have multiple ingredients and the same ingredient can be used in multiple recipes.
+
+``` sql
+CREATE TABLE Recipe_Ingredient (
+recipe_ID INT NOT NULL, 
+ingredient_ID INT NOT NULL,
+quantity DECIMAL(4, 2) NOT NULL, 
+unit ENUM('Teaspoon', 'Tablespoon', 'Cup', 'Milliliter', 'Liter', 'Gram', 'Kilogram', 'Ounce', 'Pound', 'Piece', 'Whole', 'Slice', 'Pinch', 'Stem', 'Can') NOT NULL, 
+PRIMARY KEY (recipe_ID, ingredient_ID), 
+FOREIGN KEY (recipe_ID) REFERENCES Recipe(recipe_ID) ON DELETE CASCADE,
+FOREIGN KEY (ingredient_ID) REFERENCES Ingredient(ingredient_ID) ON DELETE CASCADE
+);
+```
+
+***
+
+### Nutrition Table:
+
+Stores nutritional data for each recipe, such as calories, fat, cholesterol, sodium, carbohydrates, and protein. This table is linked to the Recipe table with the foreign key recipe_ID so the nutritional information is tied to the correct recipe.
+
+``` sql
+CREATE TABLE Nutrition (
+recipe_ID INT NOT NULL,
+calories INT NOT NULL, 
+fat INT NOT NULL,
+cholesterol INT NOT NULL, 
+sodium INT NOT NULL, 
+carbohydrate INT NOT NULL,
+protein INT NOT NULL, 
+PRIMARY KEY (recipe_ID),
+FOREIGN KEY (recipe_ID) REFERENCES Recipe(recipe_ID) ON DELETE CASCADE
+);
+```
+
+***
+
+### User Table:
+
+Stores user information, including personal details like first name, last name, email, username, and password.
+
+``` sql
+#| echo: true
+CREATE TABLE User (
+user_ID INT AUTO_INCREMENT PRIMARY KEY, 
+first_name VARCHAR(255) NOT NULL, 
+last_name VARCHAR(255) NOT NULL, 
+email VARCHAR(255) NOT NULL UNIQUE, 
+user_name VARCHAR(255) NOT NULL UNIQUE,
+password VARCHAR(255) NOT NULL,
+CHECK (CHAR_LENGTH(password) > 10) 
+);
+```
+
+***
+
+### Review Table:
+
+Allows users to review recipes, storing the rating (1-5) and an optional comment. Each review is linked to a specific recipe and user so that each recipe can have multiple reviews.
+
+``` sql
+CREATE TABLE Review (
+review_ID INT AUTO_INCREMENT PRIMARY KEY,
+recipe_ID INT NOT NULL, 
+user_ID INT NOT NULL, 
+rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5), 
+comment VARCHAR(255) NULL, 
+FOREIGN KEY (recipe_ID) REFERENCES Recipe(recipe_ID) ON DELETE CASCADE,
+FOREIGN KEY (user_ID) REFERENCES User(user_ID) ON DELETE CASCADE
+);
+```
+
+***
+
+## DB integrity
+
+The database design for the recipe website uses data integrity by using foreign keys, primary keys, and check constraints. The key elements of the design include:
+
+1.  ***The Recipe Table:***
+
+    -   Uses a primary key, `recipe_ID`, to uniquely identify each recipe. 
+
+    -   Some of the attributes, such as flavor type, are ENUM data types to ensure that the values remain consistent.
+
+2.  ***The Step Table:***
+
+    -   Links to the Recipe table through a foreign key on `recipe_ID`.
+
+    -   Implemented cascading updates and deletes, ensuring that the modifications or deletions to a recipe would automatically update the correlated steps. 
+
+3. ***The Ingredient Table:***
+
+    -   Uses a primary key, `ingredient_ID`, to uniquely identify each ingredient used in different recipes.
+
+    -   Some of the attributes, such as food group, are ENUM data types to ensure that the values remain consistent.
+
+4.  ***The Recipe_Ingredient Table:***
+
+    -   Represents the many-to-many relationship between Recipes and Ingredients.
+
+    -   Uses foreign keys, `recipe_ID` and `ingredient_ID` with cascading actions to maintain consistency across the database. 
+
+    -   Some of the attributes, such as measurement units, are ENUM data types to ensure that the values remain consistent.
+
+5.  ***Nutrition Table:***
+
+    -   Ties its data to the correct recipe through the foreign key, `recipe_ID`.
+
+6.  ***The Review Table:***
+
+    -   Uses foreign keys `recipe_ID` and `user_ID` to link reviews to specific recipes and users with integrity checks ensuring that only ratings between 1 and 5 are entered and that the recipe has to have already existed.
+
+    -   Only users with an account are able to comment to prevent spam comments and provide a respectful community environment.
+
+7.  ***The User Table:***
+
+    -   Has password length constraints as a check to ensure secure user registration.
+
+    -   Usernames are made UNIQUE, to ensure that no  two users can register with the same username, maintaing unique user identites.
+
+These foreign keys, primary keys, and check constraints keep up database integrity to prevent data anomalies and having the data remain consistent and properly linked. This structure supports a efficient management of recipes, ingredients, nutrition, review, and user interactions within the system.
+
+```{python}
+#| echo: false
+import os
+import re
+import sys
+import copy
+import random
+import pandas as pd
+from tabulate import tabulate
+from dotenv import load_dotenv
+from sqlalchemy import create_engine, text
+from sqlalchemy.exc import ArgumentError, NoSuchModuleError, OperationalError, ProgrammingError
+
+def run_sql_and_return_df(cnx, sql, show_size=True):
+    """Given an SQL command and connection string, return a DataFrame."""
+
+    # Check if the connection is None
+    if cnx is None:
+        error_message = "No valid connection. See above."
+        df = pd.DataFrame({'ErrorType': ['ConnectionError'], 'ErrorMessage': [error_message]})
+
+
+    try:
+        df = pd.read_sql(sql, cnx)
+        if df.empty:
+            # Create a single-row DataFrame with all columns as None
+            df = pd.DataFrame([["no records returned"]+ [''] * (len(df.columns) - 1) ], columns=df.columns)
+
+        df = df.replace("None","NULL")
+        return df
+
+    except OperationalError as e:
+        # Catch connection or database errors
+        error_message = f"Operational Error: {str(e)}"
+        df = pd.DataFrame({'ErrorType': ['OperationalError'], 'ErrorMessage': [error_message]})
+    except ProgrammingError as e:
+        # Catch SQL syntax errors or issues with the command
+        error_message = f"Programming Error: {str(e)}"
+        df = pd.DataFrame({'ErrorType': ['ProgrammingError'], 'ErrorMessage': [error_message]})
+#    except mysql.connector.Error as e:
+#        # Catch MySQL-specific errors
+#        error_message = f"MySQL Connector Error: {str(e)}"
+#        df = pd.DataFrame({'ErrorType': ['MySQL Connector Error'], 'ErrorMessage': [error_message]})
+    except Exception as e:
+        # Catch all other exceptions
+        error_message = f"Unknown Error: {str(e)}"
+        df = pd.DataFrame({'ErrorType': ['UnknownError'], 'ErrorMessage': [error_message]})
+    
+    return df
+
+def run_sql_and_return_html( cnx, sql, show_size=True):
+    """ """
+    df = run_sql_and_return_df( cnx, sql, show_size )
+
+    # Convert the DataFrame to HTML and use custom styling to span columns if needed
+    html_output = df.to_html(index=False, na_rep="NULL", justify="center")
+    html_output = re.sub(r'\bNone\b', 'NULL', html_output)
+    
+    # Add colspan attribute to span columns if rendering in an environment that supports it
+    html_output = html_output.replace('<td>no records found</td>', f'<td colspan="{len(df.columns)}">no records found</td>')
+    
+    # Append a row at the bottom with row and column count information
+    if show_size and (len(df)>0):
+        row_count = len(df)
+        col_count = len(df.columns)
+        count_row = f'<tr><td colspan="{col_count}" style="text-align: left;">Total Rows: {row_count}, Total Columns: {col_count}</td></tr>'
+        html_output = html_output.replace('</tbody>', f'{count_row}</tbody>')
+
+    return html_output
+
+def create_database_engine(uri):
+    """Create an SQLAlchemy engine with error handling and test the connection."""
+
+    try:
+        # Attempt to create the engine
+        engine = create_engine(uri)
+
+        # Test the connection with a lightweight query
+
+        run_sql_and_return_df(engine,"select 1 from dual")
+
+#        with engine.connect() as connection:
+#            connection.execute(text("SELECT 1"))
+        
+        return engine  # Return the engine if connection test is successful
+
+    except ArgumentError as e:
+        error_message = f"URI Error: {e}"
+    except NoSuchModuleError as e:
+        error_message = f"Database driver not found: {e}"
+    except OperationalError as e:
+        error_message = f"Operational error: {e}"
+    except Exception as e:
+        error_message = f"An unexpected error occurred: {e}"
+    
+    return None  # Return None if any error occurs
+
+def split_sql_commands(sql):
+    # Initialize default delimiter
+    delimiter = ';'
+    statements = []
+    buffer = []
+
+    # Split on newline to process line by line
+    lines = sql.splitlines()
+    
+    for line in lines:
+        # Check if the line is a DELIMITER command
+        delimiter_match = re.match(r'^DELIMITER\s+(\S+)', line.strip(), re.IGNORECASE)
+        
+        if delimiter_match:
+            # If there's a buffer with previous statements, join them and add to statements
+            if buffer:
+                statements.append(" ".join(buffer).strip())
+                buffer = []
+            # Set the new delimiter from DELIMITER command
+            delimiter = delimiter_match.group(1)
+            continue
+
+        # Use the current delimiter to split statements
+        parts = re.split(re.escape(delimiter), line)
+        
+        # Process all parts except the last (incomplete) part
+        for part in parts[:-1]:
+            buffer.append(part)
+            statements.append(" ".join(buffer).strip())
+            buffer = []
+
+        # The last part may be incomplete, so add it to the buffer
+        buffer.append(parts[-1])
+
+    # Add any remaining buffer as the last statement
+    if buffer:
+        statements.append(" ".join(buffer).strip())
+        
+    return [stmt for stmt in statements if stmt]
+
+
+def execute_ddl(cnx,ddl_commands):
+    """
+    Executes DDL statements from a file on a given SQLAlchemy connection, 
+    capturing any errors and results.
+    """
+    messages = []
+    errors = []
+
+    # Check if the connection is None
+    if cnx is None:
+        error_message = "No valid connection. See above."
+        df = pd.DataFrame({'ErrorType': ['ConnectionError'], 'ErrorMessage': [error_message]})
+        return df.to_html(index=False)
+
+    # Split commands if needed
+    ddl_statements = split_sql_commands( ddl_commands )
+#    ddl_statements = [cmd.strip() for cmd in ddl_commands.split(';') if cmd.strip()]
+
+    with cnx.connect() as connection:
+        for statement in ddl_statements:
+            try:
+                result = connection.execute(text(statement))
+                # Capture the result, if any
+                result_info = result.rowcount if result.rowcount != -1 else "No rows affected"
+                messages.append(f"Executed statement: {statement}<br/>Result: {result_info}<br/>")
+            except Exception as e:
+                # Capture the error message if execution fails
+                errors.append(f"<hr/>Error executing statement: <b>{statement}</b><br/>    Error: {str(e)}<br/>")
+
+#    return messages, errors
+
+    if errors:
+        df = pd.DataFrame({'Errors': errors})
+        return df.to_html(index=False)
+
+    return None
+
+```
+
+```{python}
+#| echo: false
+#| output: asis
+
+# modify config_map to reflect credentials needed by this program
+# These variables are set in your .env file
+config_map = {
+    'user':'CMSC408_USER',
+    'password':'CMSC408_PASSWORD',
+    'host':'CMSC408_HOST',
+    'database':'PROJECT_NAME'
+}
+# load and store credentials
+load_dotenv()
+config = {}
+for key in config_map.keys():
+    config[key] = os.getenv(config_map[key])
+
+errors = []
+for param in config.keys():
+    if config[param] is None:
+        flag = True
+        errors.append(f"Missing {config_map[param]} in .env file.")
+
+cnx = None
+error_df=""
+if errors:
+    errors.append("All subsequent SQL commands will fail.")
+    errors.append("Fix the .env file and rerun quarto ...")
+    # Convert errors to a DataFrame
+    error_df = pd.DataFrame({'Errors loading .env file': errors})
+    error_df
+else:
+# build a sqlalchemy engine string
+    engine_uri = f"mysql+pymysql://{config['user']}:{config
+    ['password']}@{config['host']}/{config['database']}"
+
+    # create and test the database connection.
+    cnx = create_database_engine( engine_uri )
+
+```
+
+## Overview of the Tables in Our Cuisine Database
+
+```{python}
+#| echo: false
+
+run_sql_and_return_html(cnx,f"""
+WITH TableInfo AS (
+    SELECT 
+        table_name AS TableName,
+        table_rows AS RecordCount
+    FROM 
+        information_schema.tables
+    WHERE 
+        table_schema = DATABASE()
+),
+ColumnInfo AS (
+    SELECT 
+        table_name AS TableName,
+        COUNT(column_name) AS ColumnCount
+    FROM 
+        information_schema.columns
+    WHERE 
+        table_schema = DATABASE()
+    GROUP BY 
+        table_name
+)
+SELECT 
+    t.TableName,
+    t.RecordCount,
+    c.ColumnCount
+FROM 
+    TableInfo t
+JOIN 
+    ColumnInfo c ON t.TableName = c.TableName;
+""")
+```
+
+## User Interface Design
+
+Our website is designed to be user-friendly and efficient. Users, both with and without accounts, can easily access recipes. The navigation is straightforward, with a consistent header on every page, enabling easy transitions between different sections. This website is implemented using HTML, CSS, and PHP, to provide a dynamic, responsi
+
+**Navigation:** The top-right corner of the header features a link to the index page. The top-left "Log In" button of the header takes users to the login page, or to the welcome page if already logged in. The "Sign Up" button of the header directs users to the registration page for creating a new account.
+
+**Welcome Page:** The welcome page confirms your username and gives you the button options of "Reset Your Password", "Sign Out Of Your Account", and "Delete Your Account". 
+
+-   *Reset Your Password* will take you to a new page where you can reset your password. 
+
+-   *Sign Out Of Your Account* will sign you out and take you back to the main index page.
+
+-   *Delete Your Account* will take you to a page where it will confirm your decision with the "yes" button, but if you click "no", it will keep your account and redirect you back to the main index page.
+
+**Index Page:** All available recipes are displayed with corresponding "View Recipe" button that lead to the specific recipe page.
+
+**Recipe Pages:** Each recipe page includes a "Back to Recipes" button, allowing users to easily return to the list of all recipes.
+
+**Authentication:** When logging in, signing up, or resetting a password, users receive clear error messages indicating issues such as incorrect credentials, passwords that are too short, and already used usernames or emails.
+
+## Reports: Twenty Queries
+
+::: {.panel-tabset .nav-pills}
+## 1
+
+**List all recipes along with their cooking and preparation times**
+
+:   π (name, cook_time, prep_time) (RECIPE)
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT name as 'Recipe Name', cook_time as 'Cook Time', prep_time as 'Prep Time'
+FROM Recipe;
+""")
+```
+
+## 2
+
+**Find the highest-rated recipe based on user reviews**
+
+:   π (name, MAX(rating)) (RECIPE ⨝ REVIEW)
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT r.name AS 'Recipe Name', MAX(rv.rating) AS 'Highest Rated'
+FROM Recipe r
+JOIN Review rv ON r.recipe_id = rv.recipe_id
+GROUP BY r.name
+ORDER BY MAX(rv.rating) DESC
+LIMIT 1;
+""")
+```
+
+## 3
+
+**Retrieve all reviews for a specific recipe**
+
+:   σ recipe_ID = given_recipe_ID (REVIEW)
+
+given_recipe_ID = 4
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT review_ID as 'Review ID', recipe_ID as 'Recipe ID', user_ID as 'User ID', rating as Rating, comment as Comment
+FROM Review
+WHERE recipe_ID = 4;
+""")
+```
+
+## 4
+
+**List users' first and last name who have written reviews for recipes**
+
+:   π (user_name) (USER ⨝ REVIEW)
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT u.user_name as 'Username', u.first_name as 'First Name', u.last_name as 'Last Name', re.recipe_ID as 'Recipe ID'
+FROM User u
+JOIN Review r ON u.user_ID = r.user_ID
+JOIN Recipe re ON r.recipe_ID = re.recipe_ID
+ORDER BY r.recipe_ID;
+""")
+```
+
+## 5
+
+**Find all recipes that have no prep time**
+
+:   π (name) (σ prep_time = NULL (RECIPE ⨝ INGREDIENT))
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+select recipe_ID as 'Recipe id' , name as 'Recipe Name', prep_time as 'Preparation Time' from Recipe
+where prep_time is NULL
+""")
+```
+
+## 6
+
+**Get the average rating for each recipe**
+
+:   π (name, AVG(rating)) (RECIPE ⨝ REVIEW)
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT r.name as 'Recipe Name', AVG(rv.rating) AS 'Avg Rating'
+FROM Recipe r
+JOIN Review rv ON r.recipe_ID = rv.recipe_ID
+GROUP BY r.name;
+""")
+```
+
+## 7
+
+**Display all ingredients used in a specific recipe**
+
+:   π (name) (σ recipe_ID = given_recipe_ID (INGREDIENT ⨝ RECIPE_INGREDIENT))
+
+given_recipe_ID = 3
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+SELECT i.ingredient_name as 'Ingredient Name'
+FROM Ingredient i
+JOIN Recipe_Ingredient ri ON i.ingredient_ID = ri.ingredient_ID
+WHERE ri.recipe_ID = 3;
+""")
+```
+
+## 8
+
+**Identify users who have rated a specific recipe**
+
+:   π (user_name) (σ recipe_ID = given_recipe_ID (USER ⨝ REVIEW))
+
+given_recipe_ID = 1
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+select u.user_name as Username, u.first_name as 'First Name', u.last_name as 'Last Name', r.rating as Rating, r.comment as Comment from User u 
+join Review r on u.user_ID = r.user_ID
+where recipe_ID = 1
+""")
+```
+
+## 9
+
+**List all recipes that require a certain ingredient**
+
+:   π (name) (σ ingredient_name = 'given_ingredient' (RECIPE ⨝ RECIPE_INGREDIENT ⨝ INGREDIENT))
+
+given_ingredient = Tomatoes
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+select i.ingredient_name as 'Ingredient Name', i.ingredient_ID as 'Ingredient_ID', r.name as 'Recipe Name', i.food_grp as 'Food Group' from Recipe r
+join Recipe_Ingredient ri on r.recipe_ID = ri.recipe_ID
+join Ingredient i on ri.ingredient_ID = i.ingredient_ID
+where i.ingredient_name = 'Tomatoes'
+group by ingredient_ID, r.name
+order by ingredient_ID;
+""")
+```
+
+## 10
+
+**Get the nutritional information for a recipe**
+
+:   π (calories, protein, fat, carbohydrates, sodium, cholesterol) (σ recipe_ID = given_recipe_ID (RECIPE ⨝ NUTRITION))
+
+given_recipe_ID = Chicken Roast
+
+```{python}
+#| echo: true
+run_sql_and_return_html(cnx,f"""
+select calories as Calories, protein as Protein, fat as Fat, carbohydrate as Carbohydrates, sodium as Sodium, cholesterol as Cholestrol from Nutrition n
+join Recipe r on n.recipe_ID = r.recipe_ID
+where r.name = 'Chicken Roast';
+""")
+```
+
+## 11
+
+**Find all recipes with no reviews**
+
+```{python}
+#| echo: true
+# π recipe_ID,name (σ recipe_ID∈/(π recipe_ID(REVIEW))(RECIPE))
+run_sql_and_return_html(cnx,"""
+select r.recipe_ID as 'Recipe ID', r.name as Name from Recipe r
+left join Review rv on r.recipe_ID = rv.recipe_ID
+where rv.recipe_ID is null
+group by r.recipe_ID
+order by r.recipe_ID;
+""")
+```
+
+## 12
+
+**List recipes with a specific amount of calories or less**
+
+:   π recipe_ID,name (σ calories≤ given_calories (NUTRITION⋈RECIPE))
+
+given_calories = 200
+
+```{python}
+# π recipe_ID,name (σ calories≤ given_calories (NUTRITION⋈RECIPE))
+run_sql_and_return_html(cnx,"""
+select r.recipe_ID as' Recipe ID', r.name as Name, n.calories as 'Total Calories' from Recipe r
+join Nutrition n on r.recipe_ID = n.recipe_ID
+where n.calories <= 200
+order by r.recipe_ID;
+""")
+```
+
+## 13
+
+**List all recipes with a specific category (ie Drink)**
+
+:   π recipe_ID,name (σ category= Drink (RECIPE))
+
+    ```{python}
+    # π recipe_ID,name (σ category= ′Dessert′ (RECIPE))
+    run_sql_and_return_html(cnx,"""
+    select recipe_ID as 'Recipe ID', name as Name from Recipe
+    where category = 'Drink'
+    order by recipe_ID;
+    """)
+    ```
+
+## 14
+
+**Find all recipes that have a cook time of less than 30 minutes**
+
+:   π recipe_ID,name (σ cook_time\<30 (RECIPE))
+
+```{python}
+# π recipe_ID,name (σ cook_time\<30 (RECIPE))
+run_sql_and_return_html(cnx,"""
+select recipe_ID as 'Recipe ID', name as Name, cook_time as 'Cook Time' from Recipe 
+where cook_time < 30
+order by recipe_ID;
+""")
+```
+
+## 15
+
+**Find recipes that use an ingredient from the 'Vegetable' food group**
+
+:   π recipe_ID,name (σ food_grp=′Vegetable′ (INGREDIENT⋈RECIPE_INGREDIENT⋈RECIPE))
+
+```{python}
+# π recipe_ID,name (σ food_grp=′Vegetable′ (INGREDIENT⋈RECIPE_INGREDIENT⋈RECIPE))
+run_sql_and_return_html(cnx,"""
+select i.ingredient_ID as 'Ingredient_ID', i.ingredient_name as 'Ingredient Name', i.food_grp as 'Food Group' from Recipe r
+join Recipe_Ingredient ri on r.recipe_ID = ri.recipe_ID
+join Ingredient i on ri.ingredient_ID = i.ingredient_ID
+where i.food_grp = 'Vegetable'
+group by ingredient_ID
+order by ingredient_ID;
+""")
+```
+
+## 16
+
+**Count how many reviews a recipe has**
+
+:   π recipe_ID,COUNT(review_ID) (REVIEW)
+
+    ```{python}
+    # π recipe_ID,COUNT(review_ID) (REVIEW) (recipe 2)
+    run_sql_and_return_html(cnx,"""
+    select recipe_ID as 'Recipe ID', count(*) as 'Total Reviews' from Review
+    where recipe_ID = 2
+    group by recipe_ID;
+    """)
+    ```
+
+## 17
+
+**Display all the recipes that have more than a specified number of servings**
+
+:   π recipe_ID,name (σ servings \> given_serving (RECIPE))
+
+given_serving = 2
+
+```{python}
+# π recipe_ID,name (σ servings \> given_serving (RECIPE))
+run_sql_and_return_html(cnx,"""
+select recipe_ID as 'Recipe ID', name as 'Recipe Name', servings as 'Total Servings' from Recipe
+where servings > 2
+order by name+0;
+""")
+```
+
+## 18
+
+**Find all the recipes that have a specific flavor profile (ie Sweet)**
+
+:   π recipe_ID,name (σ flavor=′Sweet′ (RECIPE))
+
+    ```{python}
+    # π recipe_ID,name (σ flavor=′Sweet′ (RECIPE))
+    run_sql_and_return_html(cnx,"""
+    select recipe_ID as 'Recipe ID', name as 'Recipe Name', description as 'Description', flavor as Flavor from Recipe
+    where flavor = 'Sweet'
+    order by recipe_ID;
+    """)
+    ```
+
+## 19
+
+**Find which recipe has the most amount of steps**
+
+:   π recipe_ID,MAX(COUNT(step_num)) (STEP)
+
+    ```{python}
+    # π recipe_ID,MAX(COUNT(step_num)) (STEP)
+    run_sql_and_return_html(cnx,"""
+    select s.recipe_ID as 'Recipe_ID', r.name as 'Recipe Name', COUNT(*) AS 'Total Steps' from Step s
+    join Recipe r on s.recipe_ID = r.recipe_ID
+    group by s.recipe_ID
+    order by 'Total Steps' DESC
+    LIMIT 1;
+    """)
+    ```
+
+## 20
+
+**Find first and last name from username**
+
+:   π first_name,last_name (σ user_name= ′given_user_name′ (USER))
+
+given_user_name = Megan_J
+
+```{python}
+# π first_name,last_name (σ user_name= ′given_user_name′ (USER))
+run_sql_and_return_html(cnx,"""
+select user_name as 'Username', first_name as 'First Name', last_name as 'Last Name', email as 'Email' from User
+where user_name = 'Megan_J';
+""")
+```
+:::
+
+## Crud Operations
+
+### Create
+
+For the create part of CRUD, we implemented a create user feature that allows users to create their own account onto the database and use it to sign in later. We also have the register function doesn't allow accounts with repeat usernames or emails to be created and passwords must be longer than 10 characters.
+
+![Recipe Database](../asset/create4.png)
+
+![What the page looks like when first entering it](../asset/create1.png)
+
+![When you try to create a password that is too short](../asset/create7.png)
+
+![Creating an account](../asset/create2.png)
+
+![Successfully created](../asset/create3.png)
+
+![The new entry in the database](../asset/create5.png)
+
+![Error when trying to create an account with an existing username or email](../asset/create6.png)
+
+***
+
+### Retrieve
+
+To view our recipes, we implemented the ability to retrieve data from the database and format it clearly on the website.
+
+![Main page retrieving the recipe data from the database](../asset/re1.png)
+
+![Database](../asset/re4.png)
+
+![Displaying details of a specific recipe with retrieves information](../asset/re2.png)
+
+***
+
+### Update
+
+We have implemented a password reset feature that allows users to easily reset their passwords. Additionally, we have enhanced security by hashing the passwords. The screenshots below show that the password has been successfully changed.
+
+![User Account Function - Update](../asset/user-side-delete-and-reset.png)
+
+![Before changing the password](../asset/before%20changing%20password.png)
+
+![Updated the password successfully](../asset/password%20updated.png)
+
+![After the password has been updated](../asset/after%20password%20update.png)
+
+***
+
+### Delete
+
+We have implemented a feature that allows users to delete their accounts if they no longer wish to retain them. The screenshots below confirm that the user account has been successfully removed from the database.
+
+![User Account Function - Delete](../asset/user-side-delete-and-reset.png)
+
+![Confirm to Delete User Account](../asset/delete-user.png)
+
+![User Account has been Deleted](../asset/delete-user-account.png)
+
+![The Account Does Not Exist](../asset/delete-%20trying%20to%20log%20in%20again.png)
+
+## Project Management
+
+### Draft Project schedule
+
+| Milestones                                   | Start Date | End Date |
+|----------------------------------------------|------------|----------|
+| Deliverable 5 (Topic Proposal)               | 9/1        | 9/15     |
+| Deliverable 8 (Phase 1)                      | 9/15       | 10/13    |
+| Deliverable 9 (Working website using docker) | 10/13      | 10/20    |
+| Deliverable 12 (Phase 2)                     | 10/20      | 12/9     |
+
+![](../asset/chart.png)
+
+## Future Considerations
+
+*What needs to be done next to take your project to the next level? If you had more time, what would you do next?*
+
+Future considerations for our database is implementing a working comment and rating system that allows users to leave feedback on specific recipes and have it show right after they submit it. We managed to get a comment box and visual for a rating system, but didn't have the time get them working properly. Another consideration is to have admin roles for moderating and managing comments, giving specific permissions for different users to allow admins to create, delete, and update as they need. Lastly, adding pictures to have more palatable and engaging recipes would be convenient by making it easier for people to understand our recipes. In terms of design, we would've created a more user-friendly interface that molds according to the window so that it’s more visually appealing. If we had more time, actually getting our comments and rating system to work would have been the next step as to allow users to interact with the database.
+
+## Reflections on the overall project
+
+Overall, the project was very interesting to work on. There were challenges along the way, but none were overly difficult. Creating the report.qmd was exciting because it allowed us to compile everything we had been working on throughout the semester. The queries were relatively easy to implement, as we had gained a lot of practice through the homework assignments.
+
+Creating the website from scratch, however, was quite challenging due to the various restrictions we had to consider, for example, users were only allowed to comment. If we had more time, we could have implemented everything we originally envisioned, such as, adding images for each step. Unfortunately, we were unable to accomplish that.
+
+This project was particularly meaningful since it focused on our mom's recipes, making it one of the most interesting projects we've worked on. I am excited to continue improving it in the future and fully implement a database for our mom's recipes.
+
+**Goals and Obstacles**
+
+:   We did not completely achieve what we originally intended to build. Some features, such as user authentication, admin roles, full user profiles, the ability for users to save recipes, and recipe search functionality, were part of out initial goals but were not fully implemented. We attempted to implement some of these features, but they didn't work as planned. One major challenge was our lack of knowledge on HTML and php, which made it time-consuming to understand and implement certain aspects of the project. Considering this was a semester-long project, and we only started learning queries halfway through the semester, I believe our progress was moderately good.
+
+:   We did not completely achieve what we had originally intended to build. The authentication of the users, admin roles, full user profile, users being able to save recipes to their account, searching for recipes, were all that we wanted to implement. But considering this project was a semester long and we only started learning the queries halfway through the semester, I think what we have done is moderately good. - If not, what kept you from achieving it? : We tried to implement some of the features mentioned above but if it did not work as we planned. We both aren't familiar to html, so it took time to understand how to implement some of the features.
